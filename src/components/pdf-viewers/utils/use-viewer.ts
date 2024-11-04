@@ -2,19 +2,18 @@ import 'pdfjs-dist/web/pdf_viewer.css'
 import type { Ref } from 'vue-demi'
 import { computed, onBeforeUnmount, shallowRef, watch } from 'vue-demi'
 import type * as PDFJS from 'pdfjs-dist'
-import type { EventBus, PDFLinkService, PDFViewer } from 'pdfjs-dist/web/pdf_viewer.mjs'
 import useLoading from './use-loading'
 import { useClamp } from '@vueuse/math'
 import { createEventHook } from '@vueuse/core'
 
-const { EventBus, PDFLinkService, PDFViewer } = await import('pdfjs-dist/legacy/web/pdf_viewer')
+const { PDFLinkService, PDFViewer, EventBus } = await import('pdfjs-dist/web/pdf_viewer.mjs')
 
 export function useViewer(container: Ref<HTMLDivElement>, viewer: Ref<HTMLDivElement>) {
   const pdfDoc = shallowRef<PDFJS.PDFDocumentProxy>()
-  const pdfEventBus = shallowRef<EventBus>()
-  const pdfViewer = shallowRef<PDFViewer>()
+  const pdfEventBus = shallowRef<InstanceType<typeof EventBus>>()
+  const pdfViewer = shallowRef<InstanceType<typeof PDFViewer>>()
   const pdfLoadingTask = shallowRef<PDFJS.PDFDocumentLoadingTask>()
-  const pdfLinkService = shallowRef<PDFLinkService>()
+  const pdfLinkService = shallowRef<InstanceType<typeof PDFLinkService>>()
   const pdfJS = shallowRef<typeof PDFJS>()
 
   const totalPage = computed(() => pdfDoc.value?.numPages ?? 0)
@@ -26,7 +25,7 @@ export function useViewer(container: Ref<HTMLDivElement>, viewer: Ref<HTMLDivEle
 
   const loadEvent = createEventHook<PDFJS.PDFDocumentProxy>()
   const errorEvent = createEventHook<Error>()
-  const readyEvent = createEventHook<PDFViewer>()
+  const readyEvent = createEventHook<InstanceType<typeof PDFViewer>>()
 
   async function openDoc(url: string, password?: string, workerSrc?: string) {
     loading.value = true
@@ -95,8 +94,6 @@ export function useViewer(container: Ref<HTMLDivElement>, viewer: Ref<HTMLDivEle
 
   async function initPdfViewer() {
     if (typeof navigator !== 'undefined' && container.value && viewer.value) {
-      const { PDFLinkService, PDFViewer, EventBus } = await import('pdfjs-dist/web/pdf_viewer.mjs')
-
       const bus = new EventBus()
 
       bus.on('pagesinit', () => {
