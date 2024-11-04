@@ -9,7 +9,10 @@ import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 export default defineConfig({
   // root: 'demo/',
   optimizeDeps: {
-    exclude: ['vue-demi']
+    exclude: ['vue-demi'],
+    esbuildOptions: {
+      target: 'es2022'
+    }
   },
   plugins: [vue(), Icons({ compiler: 'vue3' }), cssInjectedByJsPlugin()],
   resolve: {
@@ -17,7 +20,11 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  esbuild: {
+    target: 'es2022'
+  },
   build: {
+    target: 'es2022',
     outDir: './dist',
     lib: {
       entry: fileURLToPath(new URL('./src/main.ts', import.meta.url)),
