@@ -1,8 +1,8 @@
 import 'pdfjs-dist/web/pdf_viewer.css'
-import type { Ref} from 'vue-demi';
+import type { Ref } from 'vue-demi'
 import { computed, onBeforeUnmount, shallowRef, watch } from 'vue-demi'
 import type * as PDFJS from 'pdfjs-dist'
-import type { PDFViewer, PDFLinkService, EventBus } from 'pdfjs-dist/web/pdf_viewer'
+import type { EventBus, PDFLinkService, PDFViewer } from 'pdfjs-dist/web/pdf_viewer.mjs'
 import useLoading from './use-loading'
 import { useClamp } from '@vueuse/math'
 import { createEventHook } from '@vueuse/core'
@@ -93,9 +93,7 @@ export function useViewer(container: Ref<HTMLDivElement>, viewer: Ref<HTMLDivEle
 
   async function initPdfViewer() {
     if (typeof navigator !== 'undefined' && container.value && viewer.value) {
-      const { NullL10n, PDFLinkService, PDFViewer, EventBus } = await import(
-        'pdfjs-dist/web/pdf_viewer'
-      )
+      const { PDFLinkService, PDFViewer, EventBus } = await import('pdfjs-dist/web/pdf_viewer.mjs')
 
       const bus = new EventBus()
 
@@ -128,8 +126,6 @@ export function useViewer(container: Ref<HTMLDivElement>, viewer: Ref<HTMLDivEle
         viewer: viewer.value,
         eventBus: pdfEventBus.value,
         linkService: pdfLinkService.value,
-        l10n: NullL10n,
-        useOnlyCssZoom: false,
         removePageBorders: true
       })
 
