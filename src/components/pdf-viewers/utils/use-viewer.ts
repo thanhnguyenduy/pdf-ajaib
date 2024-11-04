@@ -7,6 +7,8 @@ import useLoading from './use-loading'
 import { useClamp } from '@vueuse/math'
 import { createEventHook } from '@vueuse/core'
 
+const { EventBus, PDFLinkService, PDFViewer } = await import('pdfjs-dist/legacy/web/pdf_viewer')
+
 export function useViewer(container: Ref<HTMLDivElement>, viewer: Ref<HTMLDivElement>) {
   const pdfDoc = shallowRef<PDFJS.PDFDocumentProxy>()
   const pdfEventBus = shallowRef<EventBus>()

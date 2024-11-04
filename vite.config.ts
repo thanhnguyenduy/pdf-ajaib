@@ -11,7 +11,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['vue-demi'],
     esbuildOptions: {
-      target: 'es2022'
+      target: 'esnext'
     }
   },
   plugins: [vue(), Icons({ compiler: 'vue3' }), cssInjectedByJsPlugin()],
@@ -21,10 +21,10 @@ export default defineConfig({
     }
   },
   esbuild: {
-    target: 'es2022'
+    target: 'esnext'
   },
   build: {
-    target: 'es2022',
+    target: 'esnext',
     outDir: './dist',
     lib: {
       entry: fileURLToPath(new URL('./src/main.ts', import.meta.url)),
